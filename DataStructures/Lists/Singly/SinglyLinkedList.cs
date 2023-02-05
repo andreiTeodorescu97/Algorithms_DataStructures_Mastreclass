@@ -1,0 +1,108 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace DataStructures.Lists.Singly
+{
+    public class SinglyLinkedList<T> : IEnumerable<T>
+    {
+        public Node<T> Head { get; private set; }
+        public Node<T> Tail { get; private set; }
+        public int Count { get; private set; }
+
+        public void AddFirst(T value)
+        {
+            AddFirst(new Node<T>(value));
+
+        }
+
+        private void AddFirst(Node<T> node)
+        {
+            Node<T> tmp = Head;
+            Head = node;
+
+            //shifting the formal Head
+            Head.Next = tmp;
+            Count++;
+
+            if (Count == 1) Tail = Head;
+        }
+
+        public void AddLast(T value)
+        {
+            AddLast(new Node<T>(value));
+        }
+
+        private void AddLast(Node<T> node)
+        {
+            if (Count == 0)
+            {
+                Head = node;
+            }
+            else
+            {
+                Tail.Next = node;
+            }
+
+            Tail = node;
+            Count++;
+        }
+
+        public void RemoveFirst()
+        {
+            if (Count == 0)
+            {
+                throw new InvalidOperationException();
+            }
+
+            Head = Head.Next;
+            if (Count == 1)
+                Tail = null;
+
+            Count--;
+        }
+
+        public void RemoveLast()
+        {
+            if (Count == 0)
+            {
+                throw new InvalidOperationException();
+            }
+
+            if (Count == 1)
+            {
+                Head = Tail = null;
+            }
+            else
+            {
+                Node<T> current = Head;
+
+                while (current.Next != Tail)
+                {
+                    current = current.Next;
+                }
+                //current.Next = null;
+                Tail = current;
+                Tail.Next = null;
+            }
+
+            Count--;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            Node<T> current = Head;
+
+            while(current != null)
+            {
+                yield return current.Value;
+                current = current.Next;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+}
